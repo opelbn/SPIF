@@ -1,0 +1,9 @@
+{
+    "features": ["payload", "transactionid"],
+    "min_payload_len": 8,
+    "bpf_pre_filter": "tcp dst port 502",
+    "bpf_filters": [
+      {"name": "function_code", "filter": "payload[7]"},
+      {"name": "src_185_175_0_3", "filter": "src 185.175.0.3"}
+    ]
+  }
