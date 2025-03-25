@@ -1,0 +1,209 @@
+\# PCAP Extractor
+
+\*\*Extract detailed network packet features from PCAP files with precision and flexibility.\*\*
+
+\`pcap_extractor_standalone.exe\` is a command-line tool designed to parse PCAP (Packet Capture) files and extract user-specified features into a CSV format. Built with C++ and leveraging \`libpcap\`, it’s optimized for network analysts, security researchers, and data scientists who need to dissect network traffic—whether for troubleshooting, machine learning, or protocol analysis. With multi-threading support, extensive feature selection, and custom BPF filtering, it’s a Swiss Army knife for packet processing.
+
+\---
+
+\#\# Table of Contents
+1. \[Features\](#features)
+2. \[Why This Tool?\](#why-this-tool)
+3. \[How It Works\](#how-it-works)
+4. \[Installation\](#installation)
+5. \[Usage\](#usage)
+   \- \[Basic Command\](#basic-command)
+   \- \[Command-Line Options\](#command-line-options)
+   \- \[Examples\](#examples)
+6. \[Output Format\](#output-format)
+7. \[Building from Source\](#building-from-source)
+8. \[Limitations\](#limitations)
+9. \[Contributing\](#contributing)
+10. \[License\](#license)
+
+\---
+
+\#\# Features
+
+\- \*\*Flexible Feature Extraction\*\*: Choose from a rich set of packet attributes like source/destination IPs, TCP flags, payload data, and more.
+\- \*\*Multi-Threaded Processing\*\*: Handles directories of PCAP files concurrently, speeding up large-scale analysis.
+\- \*\*Custom BPF Filters\*\*: Apply standard or payload-specific Berkeley Packet Filters to extract custom values (e.g., Modbus transaction IDs).
+\- \*\*Statistics\*\*: Outputs packet counts, total bytes, and average packet size for quick insights.
+\- \*\*Verbose Mode\*\*: Detailed logging for debugging or monitoring progress.
+\- \*\*Cross-Platform Potential\*\*: Written in portable C++ with \`libpcap\`, currently Windows-focused via MinGW.
+
+\---
+
+\#\# Why This Tool?
+
+Network traffic analysis often requires digging into raw packet data, but tools like Wireshark or \`tcpdump\` focus on interactive exploration or simple dumps. \`pcap_extractor\` bridges the gap for batch processing and structured output:
+\- \*\*Automation\*\*: Convert gigabytes of PCAPs into CSV for scripting or machine learning pipelines.
+\- \*\*Granularity\*\*: Extract exactly what you need—e.g., just IPs or deep payload bytes—without wading through full packet dumps.
+\- \*\*Scalability\*\*: Multi-threading ensures it doesn’t choke on large datasets, unlike sequential scripts.
+
+It’s built for users who want control and efficiency, inspired by real-world needs like analyzing Modbus traffic in industrial control systems (ICS) datasets.
+
+\---
+
+\#\# How It Works
+
+Here’s the magic under the hood:
+
+1. \*\*Input Parsing\*\*: Takes a PCAP file or directory as input via \`--in\`. If a directory, it recursively finds all \`.pcap\` files.
+2. \*\*Feature Selection\*\*: Users specify features (e.g., \`-srcip,dstip\`) from a predefined list or custom BPF filters (e.g., \`--bpf "seq_num=payload[0:4]"\`).
+3. \*\*Packet Processing\*\*:
+   \- Opens each PCAP with \`libpcap\`’s \`pcap_open_offline\`.
+   \- Applies an optional pre-filter (\`--bpf_pre_filter\`) to reduce processed packets.
+   \- For each packet, extracts headers (Ethernet, IP, TCP) and payload, computing features like \`packetsize\`, \`direction\`, or TCP flags.
+   \- Custom BPF filters are precompiled or dynamically adjusted for payload offsets.
+4. \*\*Multi-Threading\*\*: For directories, spawns a thread per PCAP, writing to temporary files (e.g., \`file.pcap.tmp\`), then merges them into the output CSV with thread-safe locking.
+5. \*\*Output\*\*: Writes a CSV with a header row of selected features, followed by one row per packet, appending stats if \`--stats\` is enabled.
+6. \*\*Cleanup\*\*: Frees resources and closes files, ensuring no memory leaks.
+
+The design balances speed (threading), flexibility (feature/BPF options), and reliability (error handling for malformed packets).
+
+\---
+
+\#\# Installation
+
+\#\#\# Prebuilt Binary
+\- Download \`pcap_extractor_v1.0.zip\` from \[releases](#) (TBD), containing:
+  \- \`pcap_extractor_standalone.exe\`
+  \- \`libpcap.dll\`
+  \- \`README.md\`
+\- Unzip and place all files in your working directory. No additional dependencies are required.
+
+\#\#\# Dependencies
+\- \*\*Windows\*\*: The included \`libpcap.dll\` handles runtime needs—no separate installation needed.
+
+\---
+
+\#\# Usage
+
+\#\#\# Basic Command
+\```bash
+pcap_extractor_standalone.exe --in <input> --out <output.csv> -<features>
+\```
+
+\- \`<input>\`: Path to a PCAP file or directory.
+\- \`<output.csv>\`: Destination CSV file.
+\- \`<features>\`: Comma-separated list of features (e.g., \`-srcip,dstip\`).
+
+\#\#\# Command-Line Options
+\| Option                \| Description                                                                 \| Example                          \|
+\|\-----------------------\|-----------------------------------------------------------------------------\|----------------------------------\|
+\| \`--in <path>\`         \| Input PCAP file or directory (required).                                    \| \`--in capture.pcap\`             \|
+\| \`--out <file>\`        \| Output CSV file (required).                                                 \| \`--out features.csv\`            \|
+\| \`-<features>\`         \| Comma-separated features to extract (no spaces).                            \| \`-srcip,dstip,packetsize\`       \|
+\| \`--bpf <name>=<filter>\` \| Custom BPF filter (e.g., payload bytes or standard filter).                \| \`--bpf seq_num=payload[0:4]\`    \|
+\| \`--bpf_pre_filter <filter>\` \| Pre-applied BPF filter for all packets.                                \| \`--bpf_pre_filter "tcp port 502"\` \|
+\| \`--min_payload_len <n>\` \| Minimum payload length to process packets (default: 0).                  \| \`--min_payload_len 10\`          \|
+\| \`--payload_format <fmt>\` \| Payload output format: \`hex\` (default) or \`raw\`.                        \| \`--payload_format raw\`          \|
+\| \`--reference_ip <ip>\` \| IP to determine packet direction (inbound/outbound).                       \| \`--reference_ip 192.168.1.1\`    \|
+\| \`--verbose\`           \| Enable detailed logging (file progress, stats).                            \| \`--verbose\`                     \|
+\| \`--stats\`             \| Append packet count, total bytes, and avg size to CSV.                     \| \`--stats\`                       \|
+\| \`--profile <file>\`    \| JSON file with default settings (features, filters).                       \| \`--profile config.json\`         \|
+
+\*\*Available Features\*\*:
+\- \`packetsize\`, \`arrivalinterval\`, \`protocol\`, \`dstport\`, \`srcip\`, \`dstip\`, \`payload\`, \`timestamp\`, \`transactionid\`, \`functioncode\`
+\- TCP flags: \`tcp_syn\`, \`tcp_ack\`, \`tcp_fin\`, \`tcp_rst\`, \`tcp_psh\`, \`tcp_urg\`
+\- IP/TCP options: \`ip_ttl\`, \`ip_tos\`, \`tcp_window\`
+\- \`direction\` (requires \`--reference_ip\`)
+
+\#\#\# Examples
+1. \*\*Basic IP Extraction\*\*:
+   \```bash
+   pcap_extractor_standalone.exe --in capture.pcap --out features.csv -srcip,dstip
+   \```
+   \- Outputs: \`srcip,dstip\` followed by IP pairs per packet.
+
+2. \*\*With Stats and Direction\*\*:
+   \```bash
+   pcap_extractor_standalone.exe --in dir/ --out features.csv -srcip,dstip,direction --reference_ip 185.175.0.5 --stats --verbose
+   \```
+   \- Processes all PCAPs in \`dir/\`, adds direction (inbound/outbound), and appends stats.
+
+3. \*\*Custom Payload Filter\*\*:
+   \```bash
+   pcap_extractor_standalone.exe --in capture.pcap --out features.csv -srcip,dstip --bpf "seq_num=payload[0:4]" --verbose
+   \```
+   \- Extracts IPs and a 4-byte payload value (e.g., sequence number).
+
+\---
+
+\#\# Output Format
+
+The output is a CSV file:
+\- \*\*Header\*\*: First row lists selected features (e.g., \`srcip,dstip\`).
+\- \*\*Rows\*\*: One per packet, with feature values in order (e.g., \`185.175.0.3,185.175.0.5\`).
+\- \*\*Stats\*\* (if \`--stats\`): Appended as comments:
+  \```
+  # Statistics
+  # Packet Count: 7023161
+  # Total Bytes: 490591109
+  # Average Packet Size: 69.85
+  \```
+
+\*\*Sample\*\*:
+\```
+srcip,dstip
+185.175.0.3,185.175.0.5
+185.175.0.5,185.175.0.3
+...
+# Statistics
+# Packet Count: 10
+# Total Bytes: 700
+# Average Packet Size: 70.00
+\```
+
+\---
+
+\#\# Building from Source
+
+\#\#\# Prerequisites
+\- \*\*Compiler\*\*: MinGW-w64 (e.g., via MSYS2 with \`g++\`).
+\- \*\*Libraries\*\*: 
+  \- \`libpcap\` (via MSYS2: \`pacman -S mingw-w64-x86_64-libpcap\`).
+  \- Winsock (\`ws2_32\`, included with Windows).
+\- \*\*JSON\*\*: \`nlohmann/json.hpp\` (single-header, included in repo under \`utils/\`).
+
+\#\#\# Steps
+1. Clone the repo:
+   \```bash
+   git clone <repo-url>
+   cd pcap_extractor
+   \```
+2. Install \`libpcap\` in MSYS2:
+   \```bash
+   pacman -S mingw-w64-x86_64-libpcap
+   \```
+3. Compile:
+   \```bash
+   cd src/extractors
+   g++ -static-libgcc -static-libstdc++ pcap_extractor.cpp -I "..\..\utils" -I "C:\msys64\mingw64\include" -L "C:\msys64\mingw64\lib" -lpcap -lws2_32 -o static/pcap_extractor_standalone.exe
+   \```
+4. Bundle with \`libpcap.dll\`:
+   \- Copy \`C:\msys64\mingw64\bin\libpcap.dll\` to the same directory as the executable.
+
+\---
+
+\#\# Limitations
+
+\- \*\*Windows Only\*\*: Relies on Winsock and \`libpcap.dll\`; Linux/macOS needs porting.
+\- \*\*Ethernet Assumption\*\*: Expects Ethernet framing (DLT_EN10MB); other link types may fail.
+\- \*\*No Real-Time Capture\*\*: Offline PCAPs only—live capture would need \`pcap_open_live\`.
+\- \*\*Memory\*\*: Large PCAPs with many threads may strain RAM due to temp files.
+
+\---
+
+\#\# Contributing
+
+Got ideas? Found a bug? 
+\- Open an issue or PR on \[GitHub](#) (TBD).
+\- Suggestions: Add live capture, support more protocols, or enhance verbosity options.
+
+\---
+
+\#\# License
+
+MIT License—free to use, modify, and distribute. See \[LICENSE](#) (TBD).
