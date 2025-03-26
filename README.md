@@ -89,7 +89,7 @@ pcap_extractor --in data/raw/capture.pcap --out features.csv -packetsize,protoco
 ```
 
 ### `zeek_extractor`
-Extracts features from Zeek `.log.labeled` files to CSV, with parallel processing.
+Extracts features from Zeek `.log` files to CSV, with parallel processing.
 
 #### Syntax
 ```
@@ -97,11 +97,11 @@ zeek_extractor -i <input_dir> -o <output_dir_or_file> [options]
 ```
 
 #### Options
-* `-i <dir>`: Input directory with `.log.labeled` files (required).
+* `-i <dir>`: Input directory with `.log` files (required).
 * `-o <path>`: Output directory or CSV file (required).
 * `--<feature>`: Select features (e.g., `--ts`, `--proto`); defaults to `protocol,service,duration,orig_bytes,resp_bytes`.
 * `--profile`: List available fields and exit.
-* `--label`: Include malicious/benign label (1/0).
+* `--label`: Include malicious/benign label (1/0). NOTE: this requires that your data have a defined field of "label" containing a string (Benign/Malicious)
 
 #### Example
 ```
