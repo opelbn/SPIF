@@ -1,0 +1,58 @@
+# Extractors CMakeLists.txt
+
+# Define utils directory for includes
+set(UTILS_DIR "${CMAKE_SOURCE_DIR}/src/utils")
+
+# pcap_extractor
+add_executable(pcap_extractor pcap_extractor.cpp)
+target_include_directories(pcap_extractor PRIVATE ${UTILS_DIR})
+find_package(Threads REQUIRED)
+target_link_libraries(pcap_extractor PRIVATE Threads::Threads)
+
+# Platform-specific for pcap_extractor
+if(WIN32)
+    set(NPCAP_LIB_DIR "${CMAKE_SOURCE_DIR}/lib/Npcap-SDK/Lib/x64" CACHE PATH "Path to Npcap libraries")
+    if(NOT EXISTS "${NPCAP_LIB_DIR}/wpcap.lib")
+        message(FATAL_ERROR "wpcap.lib not found in ${NPCAP_LIB_DIR}. Ensure Npcap-SDK is in lib/.")
+    endif()
+    target_include_directories(pcap_extractor PRIVATE "${CMAKE_SOURCE_DIR}/lib/Npcap-SDK/Include")
+    target_link_libraries(pcap_extractor PRIVATE "${NPCAP_LIB_DIR}/wpcap.lib" ws2_32)
+else()
+    find_library(PCAP_LIBRARY NAMES pcap)
+    if(NOT PCAP_LIBRARY)
+        message(FATAL_ERROR "libpcap not found. Install libpcap-dev (e.g., sudo apt install libpcap-dev).")
+    endif()
+    target_link_libraries(pcap_extractor PRIVATE ${PCAP_LIBRARY})
+endif()
+
+# zeek_extractor
+add_executable(zeek_extractor zeek_extractor.cpp)
+target_include_directories(zeek_extractor PRIVATE ${UTILS_DIR})
+target_link_libraries(zeek_extractor PRIVATE Threads::Threads)
+
+# Compiler-specific settings
+foreach(target pcap_extractor zeek_extractor)
+    if(CMAKE_CXX_COMPILER_ID MATCHES "GNU")
+        if(CMAKE_CXX_COMPILER_VERSION VERSION_LESS 9.0)
+            target_link_libraries(${target} PRIVATE stdc++fs)
+        endif()
+    elseif(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+        if(APPLE AND CMAKE_CXX_COMPILER_VERSION VERSION_LESS 11.0)
+            target_link_libraries(${target} PRIVATE c++fs)
+        elseif(NOT APPLE AND CMAKE_CXX_COMPILER_VERSION VERSION_LESS 9.0)
+            if(CMAKE_CXX_STDLIB MATCHES "libstdc++" OR NOT CMAKE_CXX_STDLIB)
+                target_link_libraries(${target} PRIVATE stdc++fs)
+            else()
+                target_link_libraries(${target} PRIVATE c++fs)
+            endif()
+        endif()
+    elseif(CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
+        target_compile_options(${target} PRIVATE /EHsc)
+    endif()
+    # Warnings
+    if(CMAKE_CXX_COMPILER_ID MATCHES "GNU" OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+        target_compile_options(${target} PRIVATE -Wall -Wextra -pedantic)
+    elseif(CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
+        target_compile_options(${target} PRIVATE /W4)
+    endif()
+endforeach()

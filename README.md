@@ -40,6 +40,22 @@ SPIF is a cross-platform toolkit for processing network data—both raw packet c
      cd build
      cmake ..
      ```
+   #### Build Individual Tools
+   Build only what you need by targeting subdirectories:
+   * **Extractors**:
+   ```
+   cd src/extractors
+   mkdir build
+   cd build
+   cmake ..
+   ```
+   * **Preprocessors**:
+   ```
+   cd src/preprocessors
+   mkdir build
+   cd build
+   cmake .. 
+   ```
 3. Build:
    ```
    cmake --build . --config Release

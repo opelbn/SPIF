@@ -1,0 +1,14 @@
+cmake_minimum_required(VERSION 3.10)
+project(SPIF CXX)
+
+# Set C++ standard
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED True)
+
+# Define source directory
+set(SRC_DIR "${CMAKE_SOURCE_DIR}/src")
+
+# Add subdirectories
+add_subdirectory(${SRC_DIR}/extractors)
+add_subdirectory(${SRC_DIR}/preprocessors)
+# Add trainers or tests later if they get C++ components

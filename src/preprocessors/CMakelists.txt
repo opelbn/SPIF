@@ -1,0 +1,38 @@
+# Preprocessors CMakeLists.txt
+
+# Define utils directory for includes
+set(UTILS_DIR "${CMAKE_SOURCE_DIR}/src/utils")
+
+# zeek_preprocessor
+add_executable(zeek_preprocessor zeek_preprocessor.cpp)
+target_include_directories(zeek_preprocessor PRIVATE ${UTILS_DIR})
+find_package(Threads REQUIRED)
+target_link_libraries(zeek_preprocessor PRIVATE Threads::Threads)
+find_package(ZLIB REQUIRED)
+target_link_libraries(zeek_preprocessor PRIVATE ZLIB::ZLIB)
+
+# Compiler-specific settings
+if(CMAKE_CXX_COMPILER_ID MATCHES "GNU")
+    if(CMAKE_CXX_COMPILER_VERSION VERSION_LESS 9.0)
+        target_link_libraries(zeek_preprocessor PRIVATE stdc++fs)
+    endif()
+elseif(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+    if(APPLE AND CMAKE_CXX_COMPILER_VERSION VERSION_LESS 11.0)
+        target_link_libraries(zeek_preprocessor PRIVATE c++fs)
+    elseif(NOT APPLE AND CMAKE_CXX_COMPILER_VERSION VERSION_LESS 9.0)
+        if(CMAKE_CXX_STDLIB MATCHES "libstdc++" OR NOT CMAKE_CXX_STDLIB)
+            target_link_libraries(zeek_preprocessor PRIVATE stdc++fs)
+        else()
+            target_link_libraries(zeek_preprocessor PRIVATE c++fs)
+        endif()
+    endif()
+elseif(CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
+    target_compile_options(zeek_preprocessor PRIVATE /EHsc)
+endif()
+
+# Warnings
+if(CMAKE_CXX_COMPILER_ID MATCHES "GNU" OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+    target_compile_options(zeek_preprocessor PRIVATE -Wall -Wextra -pedantic)
+elseif(CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
+    target_compile_options(zeek_preprocessor PRIVATE /W4)
+endif()
