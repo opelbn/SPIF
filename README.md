@@ -133,6 +133,12 @@ zeek_preprocessor features/
 * **`lib/Npcap-SDK/`**: Npcap SDK for Windows packet capture.
 * **`tests/`**: Validation scripts (e.g., `model_test.py`).
 
+## TODO
+* Add generic output stream options for all extractors (send the data elsewhere, not write to a file)
+* Add log tailing for zeek_extractor
+* Add live capture for pcap_extractor
+* Un-screw cross-platform pcap_extractor
+
 ## Contributing
 Submit issues or PRs to enhance functionality, add features, or improve documentation.
 
