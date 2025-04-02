@@ -1,0 +1,22 @@
+cmake_minimum_required(VERSION 3.10)
+project(slice)
+
+# Set C++ standard
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+# Add include directories
+include_directories(${CMAKE_CURRENT_SOURCE_DIR})
+
+# Add executable
+add_executable(slice slice_logs.cpp log_processor.cpp)
+
+# Ensure no export settings
+set_target_properties(slice PROPERTIES ENABLE_EXPORTS FALSE)
+
+# Link threading support
+find_package(Threads REQUIRED)
+target_link_libraries(slice PRIVATE Threads::Threads)
+
+# Optional: Verbose output for debugging
+set(CMAKE_VERBOSE_MAKEFILE ON)

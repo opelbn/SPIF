@@ -6,7 +6,8 @@
                 "${workspaceFolder}/**",
                 "C:/Npcap-SDK/Include",
                 "C:/Users/benja/xgboost/include",
-                "C:/cnpy"
+                "C:/cnpy",
+                "C:/Users/benja/Projects/SPIF/src/utils"
             ],
             "defines": [],
             "compilerPath": "C:/msys64/ucrt64/bin/g++.exe",
