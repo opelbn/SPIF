@@ -1,0 +1,2 @@
+{"timestamp":"2023-01-01T00:02:00Z","protoPayload":{"methodName":"google.cloud.storage.v1.GetObject","requestSize":"1500000"},"authenticationInfo":{"principalEmail":"user@external.com"}}
+{"timestamp":"2023-01-01T00:03:00Z","protoPayload":{"methodName":"google.cloud.function.v1.Invoke","requestSize":"200"},"authenticationInfo":{"principalEmail":"user@org.com"}}

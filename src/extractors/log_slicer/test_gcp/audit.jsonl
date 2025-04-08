@@ -1,0 +1,2 @@
+{"timestamp":"2023-01-01T00:00:00Z","protoPayload":{"methodName":"google.iam.admin.v1.CreateServiceAccount","requestSize":"2000000"},"authenticationInfo":{"principalEmail":"user@external.com"}}
+{"timestamp":"2023-01-01T00:01:00Z","protoPayload":{"methodName":"google.cloud.storage.v1.GetObject","requestSize":"500"},"authenticationInfo":{"principalEmail":"user@org.com"}}

@@ -1,0 +1,20 @@
+{
+    "zeek": {
+        "malicious_labels": ["malicious", "attack"],
+        "duration_threshold": 4.0
+    },
+    "gcp": {
+        "suspicious_methods": ["google.iam.admin.v1.CreateServiceAccount"],
+        "non_org_domains": ["@external.com"],
+        "bytes_threshold": 1000000
+    },
+    "netflow": {
+        "bytes_threshold": 10000000,
+        "packets_threshold": 5000,
+        "port_count_threshold": 5,
+        "suspicious_ports": [80],
+        "rules": [
+            {"field": "doctets", "op": ">", "value": 10000000}
+        ]
+    }
+}

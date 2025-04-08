@@ -1,18 +1,33 @@
 # .gitignore
 *.exe
+*.obj
+*.dll
 *.o
 *.a
+*.bat
+/CMakeFiles
+CMakeCache.txt
+cmake_install.cmake
 build/
-data/features/
-data/processed/
-data/datasets/
-data/raw/
+utils/
+data/
 models/
 __pycache__/
 *.pyc
 *.csv
 *.npy
 .vscode/
+*.pdb
+*.ilk
 
 # Ignore third-party libraries
 libs/cnpy/
+lib/
+
+# Python
+__pycache__/
+*.pyc
+
+# misc
+*.log
+*.out

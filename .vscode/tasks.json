@@ -4,149 +4,28 @@
         {
             "label": "Build Active File",
             "type": "shell",
-            "command": "g++",
+            "command": "${workspaceFolder}\\build.bat",
             "args": [
-                "-std=c++17",
-                "${file}",
-                "-o",
-                "${fileDirname}/${fileBasenameNoExtension}.exe",
-                "-I",
-                "${workspaceFolder}/utils/cnpy",
-                "-I",
-                "C:/msys64/mingw64/include",
-                "-I",
-                "C:/Npcap-SDK/Include",
-                "-I",
-                "${workspaceFolder}/src/utils",
-                "-L",
-                "${workspaceFolder}/lib/Npcap-SDK/Lib/x64",
-                "-L",
-                "${workspaceFolder}/utils/cnpy/build",
-                "-L",
-                "C:/msys64/mingw64/lib",
-                "-lcnpy",
-                "-lz",
-                "-lwpcap",
-                "-lWs2_32"
-
-
+                "${file}"
             ],
             "group": {
                 "kind": "build",
                 "isDefault": true
             },
-            "problemMatcher": ["$gcc"],
-            "detail": "Task to compile the currently active file"
-        },        
-        {
-            "label": "Build Zeek Extractor",
-            "type": "shell",
-            "command": "g++",
-            "args": [
-                "-std=c++17",
-                "src/extractors/zeek_extractor.cpp",
-                "-o",
-                "zeek_extractor.exe"
-            ],
-            "group": {
-                "kind": "build",
-                "isDefault": false
-            },
-            "problemMatcher": ["$gcc"],
-            "detail": "Task to compile zeek_extractor.cpp"
+            "problemMatcher": "$msCompile",
+            "detail": "Builds the active file into its respective executable with MSVC"
         },
         {
-            "label": "Build Zeek Preprocessor",
+            "label": "Build Log Slicer (Full)",
             "type": "shell",
-            "command": "g++",
+            "command": "${workspaceFolder}\\build.bat",
             "args": [
-                "-std=c++17",
-                "src/preprocessors/zeek_preprocessor.cpp",
-                "-o",
-                "zeek_preprocessor.exe",
-                "-I",
-                "D:/Projects/cnpy",
-                "-L",
-                "D:/Projects/cnpy/build",
-                "-lcnpy",
-                "-lz"
+                "${workspaceFolder}\\src\\extractors\\log_slicer\\log_processor.cpp",
+                "${workspaceFolder}\\src\\extractors\\log_slicer\\slice_logs.cpp"
             ],
-            "group": {
-                "kind": "build",
-                "isDefault": false
-            },
-            "problemMatcher": ["$gcc"],
-            "detail": "Task to compile zeek_preprocessor.cpp with libcnpy"
-        },
-        {
-            "label": "Build Test Zeek Extractor",
-            "type": "shell",
-            "command": "g++",
-            "args": [
-                "-std=c++17",
-                "tests/unit/test_zeek_extractor.cpp",
-                "src/extractors/zeek_extractor.cpp",
-                "-o",
-                "test_zeek_extractor.exe"
-            ],
-            "group": {
-                "kind": "test",
-                "isDefault": false
-            },
-            "problemMatcher": ["$gcc"],
-            "detail": "Task to compile test_zeek_extractor.cpp"
-        },
-        {
-            "label": "Build Test Zeek Preprocessor",
-            "type": "shell",
-            "command": "g++",
-            "args": [
-                "-std=c++17",
-                "tests/unit/test_zeek_preprocessor.cpp",
-                "src/preprocessors/zeek_preprocessor.cpp",
-                "-o",
-                "test_zeek_preprocessor.exe",
-                "-I",
-                "D:/Projects/cnpy",
-                "-L",
-                "D:/Projects/cnpy/build",
-                "-lcnpy",
-                "-lz"
-            ],
-            "group": {
-                "kind": "test",
-                "isDefault": false
-            },
-            "problemMatcher": ["$gcc"],
-            "detail": "Task to compile test_zeek_preprocessor.cpp"
-        },
-        {
-            "label": "Build All",
-            "dependsOn": [
-                "Build Zeek Extractor",
-                "Build Zeek Preprocessor"
-            ],
-            "group": {
-                "kind": "build",
-                "isDefault": false
-            },
-            "problemMatcher": ["$gcc"],
-            "detail": "Task to build all components"
-        },
-        {
-            "label": "Run Pipeline",
-            "type": "shell",
-            "command": "powershell",
-            "args": [
-                "-Command",
-                "./zeek_extractor.exe 'D:/Datasets/iot_23_datasets_small/opt/Malware-Project/BigDataset/IoTScenarios' 'data/features/zeek_features/'; ./zeek_preprocessor.exe 'data/features/zeek_features/'; python src/trainers/train_xgboost.py"
-            ],
-            "group": {
-                "kind": "build",
-                "isDefault": false
-            },
-            "problemMatcher": [],
-            "detail": "Task to run the entire pipeline"
+            "group": "build",
+            "problemMatcher": "$msCompile",
+            "detail": "Builds all log_slicer files with MSVC"
         }
     ]
 }

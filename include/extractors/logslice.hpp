@@ -7,8 +7,11 @@
 #include <unordered_set>
 #include <filesystem>
 #include <variant>
+#include <mutex>
 
 namespace log_processor {
+    extern std::mutex cout_mutex;  //prevent console mangling with threaded execution
+    
     enum class LogType { Zeek, GCP, NetFlow };
     enum class AggType { PerPair, PerSource, PerPort };
 
@@ -25,6 +28,7 @@ namespace log_processor {
         AggType agg_type = AggType::PerPair;
         std::string profile_file;
         bool profile_only = false;
+        bool no_label = false;
         std::vector<std::string> selected_features;
     };
 
@@ -65,7 +69,7 @@ namespace log_processor {
     std::vector<std::string> profile_gcp(const std::string& input_dir);
     std::vector<std::string> profile_netflow(const std::string& input_dir);
     SuspicionProfile load_profile(const std::string& profile_file);
-    bool is_malicious_label(const std::string& label, const SuspicionProfile& profile);
+    bool is_malicious_label(const IoTConnection& conn, const SuspicionProfile& profile);
     bool is_suspicious_event(const std::unordered_map<std::string, std::string>& fields, const SuspicionProfile& profile);
     bool is_suspicious_netflow(const IoTConnection& conn, const AggregateStats& stats, const SuspicionProfile& profile);
     void process_zeek(const std::string& file, const Config& config, const std::vector<std::string>& headers, const SuspicionProfile& profile);
