@@ -11,8 +11,8 @@ Welcome to SPIF, a cross-platform toolkit for analyzing raw packet captures (`.p
 ## Components
 
 ### Stable Tools
-- **[pcap_extractor](https://github.com/opelbn/SPIF/wiki/pcap_extractor)**: Extracts packet-level features (e.g., size, IP, payload) from `.pcap` files into CSV. Supports live capture and suspicion labeling.
-- **[LogSlicer](https://github.com/opelbn/SPIF/wiki/log_slicer)**: Processes Zeek (`.log`), GCP (`.jsonl`), and NetFlow (`.csv`) logs, extracting fields and labeling suspicious entries.
+- **[TEX (Traffic EXtractor)]([https://github.com/opelbn/SPIF/wiki/pcap_extractor](https://github.com/opelbn/SPIF/wiki/TEX-(Traffic-EXtractor)-Documentation))**: Extracts packet-level features (e.g., size, IP, payload) from `.pcap` files into CSV. Supports live capture and suspicion labeling.
+- **[LEX (Log EXtractor)]([https://github.com/opelbn/SPIF/wiki/log_slicer](https://github.com/opelbn/SPIF/wiki/LEX-(Log-EXtractor)-Documentation))**: Processes Zeek (`.log`), GCP (`.jsonl`), and NetFlow (`.csv`) logs, extracting fields and labeling suspicious entries.
 
 ### Experimental (Work in Progress)
 - **Preprocessors**: Convert CSV features to NumPy `.npy` files for ML (e.g., `zeek_preprocessor`).
@@ -26,8 +26,8 @@ Welcome to SPIF, a cross-platform toolkit for analyzing raw packet captures (`.p
    cd SPIF
    ```
 2. **Build**: See [Installation](#installation) or detailed docs:
-   - [pcap_extractor](https://github.com/opelbn/SPIF/wiki/pcap_extractor#installation)
-   - [LogSlicer](https://github.com/opelbn/SPIF/wiki/log_slicer#installation)
+   - [TEX][(https://github.com/opelbn/SPIF/wiki/pcap_extractor#installation](https://github.com/opelbn/SPIF/wiki/TEX-(Traffic-EXtractor)-Documentation))
+   - [LEX]([https://github.com/opelbn/SPIF/wiki/log_slicer#installation](https://github.com/opelbn/SPIF/wiki/LEX-(Log-EXtractor)-Documentation))
 3. **Run**:
    - Extract packet features: `pcap_extractor --in data.pcap --out features.csv --features packetsize,srcip`
    - Process Zeek logs: `log_slicer -i logs/zeek -o zeek.csv --ts --label`
