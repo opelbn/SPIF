@@ -16,9 +16,11 @@ __pycache__/
 *.pyc
 *.csv
 *.npy
-.vscode/
+/.vscode
 *.pdb
 *.ilk
+*.pcap
+*_docs.md
 
 # Ignore third-party libraries
 libs/cnpy/

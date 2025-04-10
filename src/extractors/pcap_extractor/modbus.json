@@ -1,0 +1,9 @@
+{
+  "features": ["packetsize", "srcip", "dstip", "dstport", "payload", "label", "modbus_tid", "modbus_func"],
+  "min_payload_len": 8,
+  "bpf_pre_filter": "tcp port 502",
+  "bpf_filters": [
+    {"name": "modbus_tid", "filter": "payload[0:2]", "endian": "big"},
+    {"name": "modbus_func", "filter": "payload[7:1]"}
+  ]
+}

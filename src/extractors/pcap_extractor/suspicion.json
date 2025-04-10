@@ -1,0 +1,7 @@
+{
+    "threshold": 1,
+    "rules": [
+      {"feature": "modbus_func", "condition": "equals", "value": 3},
+      {"feature": "dstport", "condition": "equals", "value": 502}
+    ]
+  }
