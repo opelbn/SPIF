@@ -26,8 +26,8 @@ Welcome to SPIF, a cross-platform toolkit for analyzing raw packet captures (`.p
    cd SPIF
    ```
 2. **Build**: See [Installation](#installation) or detailed docs:
-   - [TEX][(https://github.com/opelbn/SPIF/wiki/pcap_extractor#installation](https://github.com/opelbn/SPIF/wiki/TEX-(Traffic-EXtractor)-Documentation))
-   - [LEX]([https://github.com/opelbn/SPIF/wiki/log_slicer#installation](https://github.com/opelbn/SPIF/wiki/LEX-(Log-EXtractor)-Documentation))
+   - [TEX][([https://github.com/opelbn/SPIF/wiki/TEX-(Traffic-EXtractor)-Documentation])
+   - [LEX]([https://github.com/opelbn/SPIF/wiki/LEX-(Log-EXtractor)-Documentation])
 3. **Run**:
    - Extract packet features: `pcap_extractor --in data.pcap --out features.csv --features packetsize,srcip`
    - Process Zeek logs: `log_slicer -i logs/zeek -o zeek.csv --ts --label`
