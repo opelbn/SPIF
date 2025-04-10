@@ -71,4 +71,4 @@ Got ideas? Open an [issue](https://github.com/opelbn/SPIF/issues) or submit a PR
 
 ---
 
-Questions? Check the [wiki](https://github.com/opelbn/SPIF/wiki) or ping me at [your-email@example.com].
+Questions? Check the [wiki](https://github.com/opelbn/SPIF/wiki) or ping me at [benjamin.n.opel@gmail.com].
