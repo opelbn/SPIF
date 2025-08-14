@@ -16,7 +16,7 @@ __pycache__/
 *.pyc
 *.csv
 *.npy
-/.vscode
+.vscode/
 *.pdb
 *.ilk
 *.pcap

@@ -26,9 +26,6 @@ using json = nlohmann::json;
 
 enum class Endian { Big, Little };
 
-// Forward declaration
-
-
 struct packetfeatures {
     float packet_size;
     float arrival_interval;
