@@ -1,6 +1,6 @@
 # SPIF - Simplified Procedural Inference Framework
 
-Welcome to SPIF, a cross-platform toolkit for analyzing raw packet captures (`.pcap`) and structured logs (Zeek, GCP, NetFlow)—to extract features for security research, incident analysis, or machine learning. Whether you’re debugging traffic, hunting anomalies, or training models, SPIF streamlines the process with modular, high-performance tools (eventually).
+Welcome to SPIF, a cross-platform toolkit for analyzing raw packet captures (`.pcap`) and structured logs (Zeek, GCP, NetFlow)—to extract features for security research, incident analysis, or machine learning. Whether you’re debugging traffic, hunting anomalies, or training models, SPIF streamlines the process with modular, high-performance tools (eventually).  I built this because i wanted to learn ML and data preparation pipelining and frankly, felt like I should be able to write a packet parser.  So, here it is.
 
 ## Why SPIF?
 - **Versatile**: Handles packets and logs with custom filters and labeling.
